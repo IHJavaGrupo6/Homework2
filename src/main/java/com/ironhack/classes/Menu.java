@@ -211,18 +211,17 @@ public class Menu {
 
     public static Account newAccount() {
         System.out.println("Creating a new account: ");
-        Account account = null;
         Industry industry;
         long employeeCount;
         String city;
         String country;
+        Account account = null;
         try {
             industry = getInputIndustryDelegate();
             employeeCount = getNumber("Please enter the number of employees in the company: ");
             city = getAnswer("PLease enter the city in which the company is based: ");
             country = getAnswer("PLease enter the country in which the company is based: ");
             account = new Account(industry, employeeCount, city, country);
-            accountList.add(account);
         } catch (IllegalArgumentException | NullPointerException e) {
             System.err.println(e.getMessage());
             newAccount();

@@ -1,5 +1,7 @@
 package com.ironhack.classes;
 
+import com.ironhack.enums.Industry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,20 +9,20 @@ public class Account {
     private final int id;
     private static int counter = 0;
     private Industry industry;
-    private int employeeCount;
+    private long employeeCount;
     private String city;
     private String country;
-    private List<Contact> contactList = new ArrayList<Contact>();
-    private List<Oportunity> oportunityList = new ArrayList<Oportunity>();
+    private List<Contact> contactList;
+    private List<Opportunity> opportunityList;
 //  Constructor
-    public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Oportunity oportunity) {
+    public Account(Industry industry, long employeeCount, String city, String country) {
         this.id = counter++;
-        this.industry = industry;
-        this.employeeCount = employeeCount;
-        this.city = city;
-        this.country = country;
-        setContactList(contact);
-        setOportunityList(oportunity);
+        setIndustry(industry);
+        setEmployeeCount(employeeCount);
+        setCity(city);
+        setCountry(country);
+        contactList = new ArrayList<>();
+        opportunityList = new ArrayList<>();
     }
 //  Getters
     public int getId() {
@@ -31,7 +33,7 @@ public class Account {
         return industry;
     }
 
-    public int getEmployeeCount() {
+    public long getEmployeeCount() {
         return employeeCount;
     }
 
@@ -48,15 +50,15 @@ public class Account {
         return contactList;
     }
 
-    public List<Oportunity> getOportunityList() {
-        return oportunityList;
+    public List<Opportunity> getOpportunityList() {
+        return opportunityList;
     }
 //  Setters
     public void setIndustry(Industry industry) {
         this.industry = industry;
     }
 
-    public void setEmployeeCount(int employeeCount) {
+    public void setEmployeeCount(long employeeCount) {
         this.employeeCount = employeeCount;
     }
 
@@ -68,11 +70,11 @@ public class Account {
         this.country = country;
     }
 
-    public void setContactList(Contact contact) {
+    public void addContactToList(Contact contact) {
         contactList.add(contact);
     }
 
-    public void setOportunityList(Oportunity oportunity) {
-        oportunityList.add(oportunity);
+    public void addOpportunityToList(Opportunity opportunity) {
+        opportunityList.add(opportunity);
     }
 }

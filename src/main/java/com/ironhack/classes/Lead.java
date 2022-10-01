@@ -21,14 +21,6 @@ public class Lead {
         return id;
     }
 
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        Lead.contador = contador;
-    }
-
     public String getName() {
         return name;
     }
@@ -59,9 +51,5 @@ public class Lead {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
-
-    private void convert() {
-
     }
 }

@@ -87,6 +87,7 @@ public class Menu {
             case "closewon":
                 try {
                     totalOpportunities.get(id).setStatus(Status.CLOSED_WON);
+                    System.out.println(totalOpportunities.get(id));
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
@@ -94,6 +95,7 @@ public class Menu {
             case "closelost":
                 try {
                     totalOpportunities.get(id).setStatus(Status.CLOSED_LOST);
+                    System.out.println(totalOpportunities.get(id));
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }

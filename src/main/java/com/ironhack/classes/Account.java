@@ -1,4 +1,4 @@
-package com.ironhack;
+package com.ironhack.classes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ public class Account {
     private int employeeCount;
     private String city;
     private String country;
-    private List<Contact> contactList;
-    private List<Oportunity> oportunityList;
+    private List<Contact> contactList = new ArrayList<Contact>();
+    private List<Oportunity> oportunityList = new ArrayList<Oportunity>();
 //  Constructor
     public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Oportunity oportunity) {
         this.id = counter;

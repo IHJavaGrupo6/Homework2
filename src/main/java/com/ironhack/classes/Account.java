@@ -14,14 +14,13 @@ public class Account {
     private List<Oportunity> oportunityList = new ArrayList<Oportunity>();
 //  Constructor
     public Account(Industry industry, int employeeCount, String city, String country, Contact contact, Oportunity oportunity) {
-        this.id = counter;
+        this.id = counter++;
         this.industry = industry;
         this.employeeCount = employeeCount;
         this.city = city;
         this.country = country;
         setContactList(contact);
         setOportunityList(oportunity);
-        counter++;
     }
 //  Getters
     public int getId() {

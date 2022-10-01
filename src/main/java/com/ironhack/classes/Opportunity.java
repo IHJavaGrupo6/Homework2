@@ -5,7 +5,7 @@ import com.ironhack.enums.Status;
 
 public class Opportunity {
     private final int id;
-    private static int contador = 0;
+    private static int counter3 = 0;
     private long quantity;
     private Product product;
     private Status status;
@@ -13,7 +13,7 @@ public class Opportunity {
     private Contact decisionMaker;
 
     public Opportunity(Product product, long quantity, Contact decisionMaker) {
-        this.id = contador++;
+        this.id = counter3++;
         setProduct(product);
         setQuantity(quantity);
         setStatus(Status.OPEN);

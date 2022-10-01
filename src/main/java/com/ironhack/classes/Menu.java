@@ -16,7 +16,7 @@ public class Menu {
     private static Map<Integer, Lead> leadMap = new HashMap<>();
     private static List<Contact> totalContacts = new ArrayList<>();
     private static List<Opportunity> totalOpportunities = new ArrayList<>();
-    private static List<Account> accountList = new ArrayList<>();
+    private static List<Account> totalAccounts = new ArrayList<>();
 
     public static void mainMenu() {
         System.out.println("=========");
@@ -138,7 +138,7 @@ public class Menu {
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             System.err.println("Going back to the main menu.");
-            mainMenu();
+            newLead();
         }
     }
 
@@ -150,37 +150,32 @@ public class Menu {
             lead = leadMap.get(id);
             // step 2: creating a contact
             contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
+            totalContacts.add(contact);
             System.out.println("Lead converted into a new contact: ");
             System.out.println(contact);
         } catch (IllegalArgumentException | NullPointerException e) {
             backToMainMenu(e);
         }
         // step 3: creating an opportunity
-        Opportunity opportunity = null;
         try {
-            opportunity = newOpportunity(contact);
+            newOpportunity();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
         // step 4: creating an account
-        Account account = null;
         try {
-            account = newAccount();
-            account.addOpportunityToList(opportunity);
-            account.addContactToList(contact);
-            System.out.println("New account created: ");
-            System.out.println(account);
+            newAccount();
         } catch (IllegalArgumentException | NullPointerException e) {
             backToMainMenu(e);
         }
         // step 5: adding the newly created objects to the lists and removing the lead
-        totalContacts.add(contact);
-        totalOpportunities.add(opportunity);
-        accountList.add(account);
+        //totalContacts.add(contact);
+        //totalOpportunities.add(opportunity);
+        //accountList.add(account);
         leadMap.remove(id);
     }
 
-    public static Opportunity newOpportunity(Contact contact) {
+    public static Opportunity newOpportunity() {
         System.out.println("Creating a new opportunity: ");
         Product product;
         long quantity;
@@ -188,12 +183,13 @@ public class Menu {
         try {
             product = getInputProductDelegate();
             quantity = getNumber("Please enter the number of trucks being considered for purchase: ");
-            opportunity = new Opportunity(product, quantity, contact);
+            opportunity = new Opportunity(product, quantity, totalContacts.get(totalContacts.size()-1));
+            totalOpportunities.add(opportunity);
             System.out.println("Created a new opportunity: ");
             System.out.println(opportunity);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-            newOpportunity(contact);
+            newOpportunity();
         }
         return opportunity;
     }
@@ -222,7 +218,12 @@ public class Menu {
             city = getAnswer("PLease enter the city in which the company is based: ");
             country = getAnswer("PLease enter the country in which the company is based: ");
             account = new Account(industry, employeeCount, city, country);
-        } catch (IllegalArgumentException | NullPointerException e) {
+            account.addOpportunityToList(totalOpportunities.get(totalOpportunities.size()-1));
+            account.addContactToList(totalContacts.get(totalContacts.size()-1));
+            totalAccounts.add(account);
+            System.out.println("Created a new account: ");
+            System.out.println(account);
+        } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             newAccount();
         }
@@ -289,11 +290,11 @@ public class Menu {
         Menu.totalOpportunities = totalOpportunities;
     }
 
-    public static List<Account> getAccountList() {
-        return accountList;
+    public static List<Account> getTotalAccounts() {
+        return totalAccounts;
     }
 
-    public static void setAccountList(List<Account> accountList) {
-        Menu.accountList = accountList;
+    public static void setTotalAccounts(List<Account> totalAccounts) {
+        Menu.totalAccounts = totalAccounts;
     }
 }

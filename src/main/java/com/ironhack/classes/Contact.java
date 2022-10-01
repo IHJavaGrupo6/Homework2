@@ -8,7 +8,7 @@ public class Contact extends Lead{
     }
 
     @Override
-    public void setID(){
+    public void setId(){
         this.id = counter2++;
     }
 

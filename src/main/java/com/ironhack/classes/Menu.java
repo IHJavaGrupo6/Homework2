@@ -143,7 +143,7 @@ public class Menu {
         // step 4: creating an account
         Account account = null;
         try {
-            account = addNewAccount();
+            account = newAccount();
         } catch (IllegalArgumentException e) {
             backToMainMenu(e);
         }
@@ -180,7 +180,7 @@ public class Menu {
         return product;
     }
 
-    public static Account addNewAccount() {
+    public static Account newAccount() {
         Account account = null;
         try {
             Industry industry = getInputIndustryDelegate();
@@ -191,7 +191,7 @@ public class Menu {
             accountList.add(account);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-            addNewAccount();
+            newAccount();
         }
         return account;
     }

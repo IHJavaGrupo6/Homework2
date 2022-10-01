@@ -1,5 +1,8 @@
 package com.ironhack.classes;
 
+import com.ironhack.enums.Product;
+import com.ironhack.enums.Status;
+
 public class Opportunity {
     private final int id;
     private static int contador = 0;
@@ -9,10 +12,10 @@ public class Opportunity {
 
     private Contact decisionMaker;
 
-    public Opportunity(long quantity, Product product, Contact decisionMaker) {
+    public Opportunity(Product product, long quantity, Contact decisionMaker) {
         this.id = contador++;
-        setQuantity(quantity);
         setProduct(product);
+        setQuantity(quantity);
         setStatus(Status.OPEN);
         setDecisionMaker(decisionMaker);
     }

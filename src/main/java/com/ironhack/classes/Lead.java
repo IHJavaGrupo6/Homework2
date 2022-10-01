@@ -2,7 +2,7 @@ package com.ironhack.classes;
 
 public class Lead {
 
-    private final int id;
+    protected static int id;
     private static int contador = 0;
     private String name;
     private long phoneNumber;

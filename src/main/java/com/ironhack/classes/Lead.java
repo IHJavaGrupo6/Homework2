@@ -2,15 +2,15 @@ package com.ironhack.classes;
 
 public class Lead {
 
-    protected int id;
-    private static int contador = 0;
+    private final int id;
+    private static int counter1 = 0;
     private String name;
     private long phoneNumber;
     private String email;
     private String companyName;
 
     public Lead(String name, long phoneNumber, String email, String companyName) {
-        this.id = contador++;
+        this.id = counter1++;
         setName(name);
         setPhoneNumber(phoneNumber);
         setEmail(email);

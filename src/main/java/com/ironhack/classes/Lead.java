@@ -2,7 +2,7 @@ package com.ironhack.classes;
 
 public class Lead {
 
-    protected static int id;
+    protected int id;
     private static int contador = 0;
     private String name;
     private long phoneNumber;
@@ -51,5 +51,11 @@ public class Lead {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    @Override
+    public String toString() {
+        return "Lead: id = " + getId() + ", name = " + name + ", phoneNumber = " + phoneNumber +
+                ", email = " + email + ", companyName = " + companyName + "\n";
     }
 }

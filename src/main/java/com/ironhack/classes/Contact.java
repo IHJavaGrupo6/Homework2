@@ -8,5 +8,9 @@ public class Contact extends Lead{
         this.id = counter2++;
     }
 
-
+    @Override
+    public String toString() {
+        return "Contact: id = " + getId() + ", name = " + getName() + ", phoneNumber = " + getPhoneNumber() +
+                ", email = " + getEmail() + ", companyName = " + getCompanyName() + "\n";
+    }
 }

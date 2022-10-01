@@ -5,6 +5,7 @@ import com.ironhack.enums.Product;
 import com.ironhack.enums.Status;
 
 import java.util.*;
+import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
@@ -25,9 +26,10 @@ public class Menu {
         System.out.println("\033[0;1m• \u001B[34mShow leads \u001B[0m\033[0;0m to show the list of existing leads");
         System.out.println("\u001B[36m    Existing leads: " + leadMap.keySet().size() + "\u001B[0m");
         System.out.println("\033[0;1m• \u001B[34mLook up lead + id \u001B[0m\033[0;0m to find a lead by its id number and display its info");
-//        System.out.println("\033[0;1m• \u001B[34mShow opportunities \u001B[0m\033[0;0m to show the list of existing oppportunities (both open and closed)");
-//        System.out.println("\u001B[36m    Existing opportunities: " + totalOpportunities.size() + "\u001B[0m");
-//        System.out.println("\033[0;1m• \u001B[34mLook up opportunity + id \u001B[0m\033[0;0m to find a lead by its id number and display its info");
+        System.out.println("\033[0;1m• \u001B[34mConvert lead + id \u001B[0m\033[0;0m to find a lead by its id number and convert it into a new opportunity");
+        System.out.println("\033[0;1m• \u001B[34mShow opportunities \u001B[0m\033[0;0m to show the list of existing opportunities (both open and closed)");
+        System.out.println("\u001B[36m    Existing opportunities: " + totalOpportunities.size() + "\u001B[0m");
+        System.out.println("\033[0;1m• \u001B[34mLook up opportunity + id \u001B[0m\033[0;0m to find a lead by its id number and display its info");
         System.out.println("\033[0;1m• \u001B[34mClose-Won + id \u001B[0m\033[0;0m to close an oportunity that ended with a sale ");
         System.out.println("\033[0;1m• \u001B[34mClose-Lost + id \u001B[0m\033[0;0m to close a lost oportunity");
         System.out.println("\033[0;1m• \u001B[34mExit \u001B[0m\033[0;0m");
@@ -41,47 +43,61 @@ public class Menu {
 
     public static void getMethodInput() {
         input = new Scanner(System.in);
-        String methodAndId = input.nextLine().toLowerCase();//replaceAll("\\W+", "");
-        if (methodAndId.isBlank() || methodAndId == null) {
+        String methodAndId = input.nextLine().toLowerCase().replaceAll("\\W+", "");
+        if (methodAndId.isBlank()) {
             throw new IllegalArgumentException("Nothing received. Please enter at valid command!");
         }
         String method = methodAndId.replaceAll("\\d+", "");
-        int id = parseInt(methodAndId.replaceAll("\\D+", ""));
+        int id = 0;
+        try {
+            id = parseInt(methodAndId.replaceAll("\\D+", ""));
+        } catch (NumberFormatException ignored) {
+        }
         switch (method) {
             case "newlead":
                 newLead();
-                break;
+                mainMenu();
             case "showleads":
                 showLeads();
-                break;
+                mainMenu();
             case "lookuplead":
                 try {
                     System.out.println(leadMap.get(id).toString());
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
-                break;
+                mainMenu();
             case "convert":
                 try {
                     convertLead(id);
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
-                break;
+                mainMenu();
+            case "showopportunities":
+                showOpportunities();
+                mainMenu();
+            case "lookupopportunity":
+                try {
+                    System.out.println(totalOpportunities.get(id).toString());
+                } catch (IllegalArgumentException e) {
+                    backToMainMenu(e);
+                }
+                mainMenu();
             case "closewon":
                 try {
                     totalOpportunities.get(id).setStatus(Status.CLOSED_WON);
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
-                break;
+                mainMenu();
             case "closelost":
                 try {
                     totalOpportunities.get(id).setStatus(Status.CLOSED_LOST);
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
-                break;
+                mainMenu();
             case "exit":
                 System.out.println("Good bye!");
                 System.exit(0);
@@ -93,7 +109,7 @@ public class Menu {
     public static String getAnswer(String question) {
         System.out.println(question);
         String answer = input.nextLine();
-        if (answer.isBlank() || answer == null) {
+        if (answer.isBlank()) {
             throw new IllegalArgumentException("Nothing received. Please enter at least one letter or number!");
         }
         return answer;
@@ -102,14 +118,14 @@ public class Menu {
     public static long getNumber(String question) {
         System.out.println(question);
         String numberString = input.nextLine().replaceAll("\\D+", "");
-        if (numberString.isBlank() || numberString == null) {
+        if (numberString.isBlank()) {
             throw new IllegalArgumentException("No numbers received. Please enter at least one number!");
         }
-        long number = parseLong(numberString);
-        return number;
+        return parseLong(numberString);
     }
 
     public static void newLead() {
+        System.out.println("Creating a new lead: ");
         try {
             String name = getAnswer("Please enter the name of the new lead: ");
             long phoneNumber = getNumber("Please enter a phone number for the new lead: ");
@@ -117,42 +133,46 @@ public class Menu {
             String companyName = getAnswer("Please enter the name of the company for the new lead: ");
             Lead lead = new Lead(name, phoneNumber, email, companyName);
             leadMap.put(lead.getId(), lead);
+            System.out.println("New lead created: ");
+            System.out.println(lead);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             System.err.println("Going back to the main menu.");
             mainMenu();
-            // better to go to adding a new lead again or all the way back to the main menu?
-            //System.err.println("Going back to adding a new lead.");
-            //addNewLead();
         }
     }
 
     public static void convertLead(int id) {
         // step 1: fetching the lead
-        Lead lead = null;
+        Lead lead;
+        Contact contact = null;
         try {
             lead = leadMap.get(id);
-        } catch (IllegalArgumentException e) {
+            // step 2: creating a contact
+            contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
+            System.out.println("Lead converted into a new contact: ");
+            System.out.println(contact);
+        } catch (IllegalArgumentException | NullPointerException e) {
             backToMainMenu(e);
         }
-        // step 2: creating a contact
-        Contact contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
         // step 3: creating an opportunity
         Opportunity opportunity = null;
         try {
             opportunity = newOpportunity(contact);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-
         }
         // step 4: creating an account
         Account account = null;
         try {
             account = newAccount();
-        } catch (IllegalArgumentException e) {
+            account.addOpportunityToList(opportunity);
+            account.addContactToList(contact);
+            System.out.println("New account created: ");
+            System.out.println(account);
+        } catch (IllegalArgumentException | NullPointerException e) {
             backToMainMenu(e);
         }
-        account.getOpportunityList().add(opportunity);
         // step 5: adding the newly created objects to the lists and removing the lead
         totalContacts.add(contact);
         totalOpportunities.add(opportunity);
@@ -161,16 +181,20 @@ public class Menu {
     }
 
     public static Opportunity newOpportunity(Contact contact) {
-        Product product = null;
-        long quantity = 0;
+        System.out.println("Creating a new opportunity: ");
+        Product product;
+        long quantity;
+        Opportunity opportunity = null;
         try {
             product = getInputProductDelegate();
             quantity = getNumber("Please enter the number of trucks being considered for purchase: ");
+            opportunity = new Opportunity(product, quantity, contact);
+            System.out.println("Created a new opportunity: ");
+            System.out.println(opportunity);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             newOpportunity(contact);
         }
-        Opportunity opportunity = new Opportunity(product, quantity, contact);
         return opportunity;
     }
 
@@ -186,15 +210,20 @@ public class Menu {
     }
 
     public static Account newAccount() {
+        System.out.println("Creating a new account: ");
         Account account = null;
+        Industry industry;
+        long employeeCount;
+        String city;
+        String country;
         try {
-            Industry industry = getInputIndustryDelegate();
-            long employeeCount = getNumber("Please enter the number of employees in the company: ");
-            String city = getAnswer("PLease enter the city in which the company is based: ");
-            String country = getAnswer("PLease enter the country in which the company is based: ");
+            industry = getInputIndustryDelegate();
+            employeeCount = getNumber("Please enter the number of employees in the company: ");
+            city = getAnswer("PLease enter the city in which the company is based: ");
+            country = getAnswer("PLease enter the country in which the company is based: ");
             account = new Account(industry, employeeCount, city, country);
             accountList.add(account);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             System.err.println(e.getMessage());
             newAccount();
         }
@@ -202,15 +231,13 @@ public class Menu {
     }
 
     public static Industry getInputIndustryDelegate() {
-        String industryString = null;
-        try {
-            industryString = getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER").toUpperCase();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            newAccount();
-        }
+        String industryString = getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER").toUpperCase();
         Industry industry;
-        if (industryString.equals("PRODUCE") || industryString.equals("ECOMMERCE") || industryString.equals("MANUFACTURING") || industryString.equals("MEDICAL") || industryString.equals("OTHER")) {
+        if (industryString.equals("PRODUCE")
+                || industryString.equals("ECOMMERCE")
+                || industryString.equals("MANUFACTURING")
+                || industryString.equals("MEDICAL")
+                || industryString.equals("OTHER")) {
             industry = Industry.valueOf(industryString);
         } else {
             throw new IllegalArgumentException("No such industry type found. Please enter PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER");
@@ -219,13 +246,20 @@ public class Menu {
     }
 
     public static void showLeads() {
-        System.out.println("\033[0;1m Existing leads: \033[0;0m");
+        System.out.println("\033[0;1m Existing leads: \033[0;0m\n");
         for (Lead lead : leadMap.values()) {
             System.out.println("•" + lead.toString());
         }
     }
 
-    public static void backToMainMenu(IllegalArgumentException e) {
+    public static void showOpportunities() {
+        System.out.println("\033[0;1m Existing opportunities: \033[0;0m\n");
+        for (Opportunity opportunity : totalOpportunities) {
+            System.out.println("•" + opportunity.toString());
+        }
+    }
+
+    public static void backToMainMenu(Exception e) {
         System.err.println(e.getMessage());
         System.err.println("Going back to the main menu.");
         mainMenu();

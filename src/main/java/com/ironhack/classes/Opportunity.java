@@ -58,4 +58,10 @@ public class Opportunity {
     public void setDecisionMaker(Contact decisionMaker) {
         this.decisionMaker = decisionMaker;
     }
+
+    @Override
+    public String toString() {
+        return "Opportunity: id = " + id + ", product = " + product + ", trucks quantity = " + quantity + ", status = " + status +
+                "\n Decision maker " + decisionMaker;
+    }
 }

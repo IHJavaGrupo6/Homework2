@@ -77,4 +77,10 @@ public class Account {
     public void addOpportunityToList(Opportunity opportunity) {
         opportunityList.add(opportunity);
     }
+
+    @Override
+    public String toString() {
+        return "Account: id = " + id + ", industry=" + industry + ", employeeCount=" + employeeCount + ", city='" + city + ", country='" + country +
+                "\n Contact List \n" + contactList + "\n Opportunity List \n" + opportunityList;
+    }
 }

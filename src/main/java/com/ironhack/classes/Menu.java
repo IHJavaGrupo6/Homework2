@@ -1,16 +1,17 @@
 package com.ironhack.classes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import com.ironhack.enums.Industry;
+import com.ironhack.enums.Product;
+import com.ironhack.enums.Status;
+
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 public class Menu {
 
-    private static Scanner input = new Scanner(System.in);
+    private static Scanner input;
     private static Map<Integer, Lead> leadMap = new HashMap<>();
     private static List<Contact> totalContacts = new ArrayList<>();
     private static List<Opportunity> totalOpportunities = new ArrayList<>();
@@ -29,6 +30,7 @@ public class Menu {
 //        System.out.println("\033[0;1m• \u001B[34mLook up opportunity + id \u001B[0m\033[0;0m to find a lead by its id number and display its info");
         System.out.println("\033[0;1m• \u001B[34mClose-Won + id \u001B[0m\033[0;0m to close an oportunity that ended with a sale ");
         System.out.println("\033[0;1m• \u001B[34mClose-Lost + id \u001B[0m\033[0;0m to close a lost oportunity");
+        System.out.println("\033[0;1m• \u001B[34mExit \u001B[0m\033[0;0m");
         System.out.println("What do you want to do? ");
         try {
             getMethodInput();
@@ -38,7 +40,8 @@ public class Menu {
     }
 
     public static void getMethodInput() {
-        String methodAndId = input.nextLine().toLowerCase().replaceAll("\\W+", "");
+        input = new Scanner(System.in);
+        String methodAndId = input.nextLine().toLowerCase();//replaceAll("\\W+", "");
         if (methodAndId.isBlank() || methodAndId == null) {
             throw new IllegalArgumentException("Nothing received. Please enter at valid command!");
         }
@@ -46,7 +49,7 @@ public class Menu {
         int id = parseInt(methodAndId.replaceAll("\\D+", ""));
         switch (method) {
             case "newlead":
-                addNewLead();
+                newLead();
                 break;
             case "showleads":
                 showLeads();
@@ -79,6 +82,9 @@ public class Menu {
                     backToMainMenu(e);
                 }
                 break;
+            case "exit":
+                System.out.println("Good bye!");
+                System.exit(0);
             default:
                 throw new IllegalArgumentException("No such command found. Please enter a valid command!");
         }
@@ -103,7 +109,7 @@ public class Menu {
         return number;
     }
 
-    public static void addNewLead() {
+    public static void newLead() {
         try {
             String name = getAnswer("Please enter the name of the new lead: ");
             long phoneNumber = getNumber("Please enter a phone number for the new lead: ");
@@ -134,8 +140,7 @@ public class Menu {
         // step 3: creating an opportunity
         Opportunity opportunity = null;
         try {
-            opportunity = newOpportunity();
-            opportunity.setDecisionMaker(contact);
+            opportunity = newOpportunity(contact);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
 
@@ -155,7 +160,7 @@ public class Menu {
         leadMap.remove(id);
     }
 
-    public static Opportunity newOpportunity() {
+    public static Opportunity newOpportunity(Contact contact) {
         Product product = null;
         long quantity = 0;
         try {
@@ -163,9 +168,9 @@ public class Menu {
             quantity = getNumber("Please enter the number of trucks being considered for purchase: ");
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-            newOpportunity();
+            newOpportunity(contact);
         }
-        Opportunity opportunity = new Opportunity(product, quantity, null);
+        Opportunity opportunity = new Opportunity(product, quantity, contact);
         return opportunity;
     }
 
@@ -197,7 +202,13 @@ public class Menu {
     }
 
     public static Industry getInputIndustryDelegate() {
-        String industryString = getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER").toUpperCase();
+        String industryString = null;
+        try {
+            industryString = getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER").toUpperCase();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            newAccount();
+        }
         Industry industry;
         if (industryString.equals("PRODUCE") || industryString.equals("ECOMMERCE") || industryString.equals("MANUFACTURING") || industryString.equals("MEDICAL") || industryString.equals("OTHER")) {
             industry = Industry.valueOf(industryString);

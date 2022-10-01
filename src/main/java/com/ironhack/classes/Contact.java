@@ -5,7 +5,7 @@ public class Contact extends Lead{
 
     public Contact(String name, Long phoneNumber, String email, String companyName) {
         this.id = counter2++;
-        super(name, phoneNumber, email, email);
+        super(name, phoneNumber, email, companyName);
 
     }
 

@@ -4,6 +4,8 @@ import com.ironhack.enums.Industry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Account {
     private final int id;
@@ -78,6 +80,14 @@ public class Account {
         opportunityList.add(opportunity);
     }
 
+
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public static boolean validate(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
     @Override
     public String toString() {
         return "Account: id = " + id + ", industry=" + industry + ", employeeCount=" + employeeCount + ", city='" + city + ", country='" + country +

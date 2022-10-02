@@ -80,7 +80,7 @@ public class Account {
         opportunityList.add(opportunity);
     }
     public static final Pattern VALID_PHONENUMBER_REGEX =
-            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+            Pattern.compile("\\A[0-9]{3}[0-9]{3}[0-9]{3}\\z", Pattern.CASE_INSENSITIVE);
 
     public static boolean validatePhone(String phoneStr) {
         Matcher matcher = VALID_PHONENUMBER_REGEX.matcher(phoneStr);

@@ -133,6 +133,7 @@ public class Menu {
         try {
             String name = getAnswer("Please enter the name of the new lead: ");
             long phoneNumber = getNumber("Please enter a phone number for the new lead: ");
+            if(!Account.validatePhone(String.valueOf(phoneNumber))) throw new IllegalArgumentException("Invalid phone format");
             String email = getAnswer("Please enter an email for the new lead: ");
             if(!Account.validate(email)) throw new IllegalArgumentException("Invalid email format");
             String companyName = getAnswer("Please enter the name of the company for the new lead: ");
@@ -142,7 +143,7 @@ public class Menu {
             System.out.println(lead);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-            System.err.println("Going back to the main menu.");
+            System.err.println("Going back to new Lead creation.");
             newLead();
         }
     }

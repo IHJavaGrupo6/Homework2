@@ -130,6 +130,7 @@ public class Menu {
             String name = getAnswer("Please enter the name of the new lead: ");
             long phoneNumber = getNumber("Please enter a phone number for the new lead: ");
             String email = getAnswer("Please enter an email for the new lead: ");
+            if(!Account.validate(email)) throw new IllegalArgumentException("Invalid email format");
             String companyName = getAnswer("Please enter the name of the company for the new lead: ");
             Lead lead = new Lead(name, phoneNumber, email, companyName);
             leadMap.put(lead.getId(), lead);

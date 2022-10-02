@@ -1,5 +1,6 @@
-import com.ironhack.classes.Lead;
 import com.ironhack.classes.Menu;
+import org.junit.jupiter.api.BeforeEach;
+import com.ironhack.classes.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MenuTests {
 
+    Menu menu;
+    Scanner input;
+    @BeforeEach
+    void setUp(){
+
+        menu = new Menu();
+        input = new Scanner(System.in);
+    }
     @Test
     @DisplayName("getMethodInput() throws exception with empty input")
     void getMethodInput_throwsIllegalArgumentException() {
@@ -26,7 +35,7 @@ public class MenuTests {
         String userInput = " ";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> Menu.getMethodInput());
+        assertThrows(IllegalArgumentException.class, () -> menu.getMethodInput());
 
     }
 
@@ -38,7 +47,7 @@ public class MenuTests {
         String userInput = "blabla";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> Menu.getMethodInput());
+        assertThrows(IllegalArgumentException.class, () -> menu.getMethodInput());
 
     }
 
@@ -50,7 +59,7 @@ public class MenuTests {
         String userInput = " ";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> Menu.getAnswer(" "));
+        assertThrows(IllegalArgumentException.class, () -> menu.getAnswer(" "));
 
     }
 
@@ -62,7 +71,7 @@ public class MenuTests {
         String userInput = " ";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> Menu.getNumber(" "));
+        assertThrows(IllegalArgumentException.class, () -> menu.getNumber(" "));
 
     }
 
@@ -75,7 +84,7 @@ public class MenuTests {
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
         String expected = "answer";
-        String actual = Menu.getAnswer(" ");
+        String actual = menu.getAnswer(" ");
         assertEquals(expected, actual);
 
     }
@@ -89,7 +98,7 @@ public class MenuTests {
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
         Long expected = Long.valueOf(666888999);
-        Long actual = Menu.getNumber(" ");
+        Long actual = menu.getNumber(" ");
         assertEquals(expected, actual);
 
     }
@@ -102,21 +111,12 @@ public class MenuTests {
         String userInput = "blabla";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> Menu.getInputProductDelegate());
+        assertThrows(IllegalArgumentException.class, () -> menu.getInputProductDelegate());
 
     }
 
-    @Test
-    @DisplayName("getInputIndustryDelegate() throws exception wrong input")
-    void getInputIndustryDelegate_throwsIllegalArgumentException() {
 
 
-        String userInput = "blabla";
-        ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> Menu.getInputIndustryDelegate());
-
-    }
 
 
 }

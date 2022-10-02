@@ -109,6 +109,7 @@ public class Menu {
     }
 
     public static String getAnswer(String question) {
+        input = new Scanner(System.in);
         System.out.println(question);
         String answer = input.nextLine();
         if (answer.isBlank()) {
@@ -118,6 +119,7 @@ public class Menu {
     }
 
     public static long getNumber(String question) {
+        input = new Scanner(System.in);
         System.out.println(question);
         String numberString = input.nextLine().replaceAll("\\D+", "");
         if (numberString.isBlank()) {

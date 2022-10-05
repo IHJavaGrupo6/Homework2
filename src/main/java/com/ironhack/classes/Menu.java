@@ -87,6 +87,7 @@ public class Menu {
             case "closewon":
                 try {
                     totalOpportunities.get(id).setStatus(Status.CLOSED_WON);
+                    System.out.println(totalOpportunities.get(id));
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
@@ -94,6 +95,7 @@ public class Menu {
             case "closelost":
                 try {
                     totalOpportunities.get(id).setStatus(Status.CLOSED_LOST);
+                    System.out.println(totalOpportunities.get(id));
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
@@ -107,6 +109,7 @@ public class Menu {
     }
 
     public static String getAnswer(String question) {
+        input = new Scanner(System.in);
         System.out.println(question);
         String answer = input.nextLine();
         if (answer.isBlank()) {
@@ -116,6 +119,7 @@ public class Menu {
     }
 
     public static long getNumber(String question) {
+        input = new Scanner(System.in);
         System.out.println(question);
         String numberString = input.nextLine().replaceAll("\\D+", "");
         if (numberString.isBlank()) {
@@ -129,7 +133,9 @@ public class Menu {
         try {
             String name = getAnswer("Please enter the name of the new lead: ");
             long phoneNumber = getNumber("Please enter a phone number for the new lead: ");
+            if(!Account.validatePhone(String.valueOf(phoneNumber))) throw new IllegalArgumentException("Invalid phone format");
             String email = getAnswer("Please enter an email for the new lead: ");
+            if(!Account.validate(email)) throw new IllegalArgumentException("Invalid email format");
             String companyName = getAnswer("Please enter the name of the company for the new lead: ");
             Lead lead = new Lead(name, phoneNumber, email, companyName);
             leadMap.put(lead.getId(), lead);
@@ -137,7 +143,7 @@ public class Menu {
             System.out.println(lead);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
-            System.err.println("Going back to the main menu.");
+            System.err.println("Going back to new Lead creation.");
             newLead();
         }
     }

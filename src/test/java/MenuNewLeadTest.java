@@ -29,7 +29,7 @@ public class MenuNewLeadTest {
         String[] lines = outPut.toString().split(System.lineSeparator());
         String actual = lines[lines.length-1];
         assertEquals("Lead: id = 0, name = name, phoneNumber = 832999777, email = mail@mail.com, companyName = company name\n", actual);
-
+        System.exit(0);
         System.setIn(savedStandardInputStream);
     }*/
 }

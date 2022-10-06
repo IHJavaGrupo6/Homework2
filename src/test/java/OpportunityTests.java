@@ -1,4 +1,3 @@
-import com.ironhack.classes.Contact;
 import com.ironhack.classes.Lead;
 import com.ironhack.classes.Menu;
 import com.ironhack.classes.Opportunity;

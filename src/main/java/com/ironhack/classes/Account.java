@@ -99,14 +99,6 @@ public class Account {
         this.country = country;
     }
 
-    public void addContactToList(Contact contact) {
-        contactList.add(contact);
-    }
-
-    public void addOpportunityToList(Opportunity opportunity) {
-        opportunityList.add(opportunity);
-    }
-
     public static final Pattern VALID_PHONENUMBER_REGEX =
             Pattern.compile("\\A[0-9]{3}[0-9]{3}[0-9]{3}\\z", Pattern.CASE_INSENSITIVE);
 

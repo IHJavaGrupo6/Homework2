@@ -1,11 +1,8 @@
 package com.ironhack.classes;
 
-import com.ironhack.enums.Industry;
-import com.ironhack.enums.Product;
 import com.ironhack.enums.Status;
 
 import java.util.*;
-import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
@@ -171,7 +168,7 @@ public class Menu {
         // step 1: fetching the lead
         if (id < 0 || id >= leadMap.size()) throw new IllegalArgumentException("No lead found with this id!");
         // step 2: creating a contact
-        Contact contact = null;
+        Contact contact;
         contact = newContact(leadMap.get(id));
         // step 3: creating an opportunity
         Opportunity opportunity = null;

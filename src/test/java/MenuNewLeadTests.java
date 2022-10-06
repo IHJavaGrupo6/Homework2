@@ -37,7 +37,4 @@ public class MenuNewLeadTests {
         assertThrows(IllegalArgumentException.class,()->Menu.showLeads(leadMap1));
     }
 
-
-
-
 }

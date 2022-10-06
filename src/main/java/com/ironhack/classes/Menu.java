@@ -59,8 +59,11 @@ public class Menu {
                 boolean repeatLead = true;
                 while (repeatLead) {
                     try {
+                        Long phoneNumber = getNumber("Please enter a phone number for the new lead: ");
+
                         lead = newLead(getAnswer("Please enter the name of the new lead: "),
-                                getNumber("Please enter a phone number for the new lead: "),
+                    if (!Account.validatePhone(String.valueOf(getNumber("Please enter a phone number for the new lead: ")))){
+                        throw new IllegalArgumentException("Invalid phone format")},
                                 getAnswer("Please enter an email for the new lead: "),
                                 getAnswer("Please enter the name of the company for the new lead: "));
                         repeatLead = false;

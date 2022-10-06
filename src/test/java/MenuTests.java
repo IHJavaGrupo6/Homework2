@@ -1,30 +1,22 @@
 import com.ironhack.classes.Menu;
 import org.junit.jupiter.api.BeforeEach;
-import com.ironhack.classes.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class MenuTests {
 
-    Menu menu;
     Scanner input;
 
     @BeforeEach
     void setUp() {
 
-        menu = new Menu();
         input = new Scanner(System.in);
     }
 
@@ -36,7 +28,7 @@ public class MenuTests {
         String userInput = " ";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> menu.getMethodInput());
+        assertThrows(IllegalArgumentException.class, Menu::getMethodInput);
 
     }
 
@@ -48,7 +40,7 @@ public class MenuTests {
         String userInput = "blabla";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> menu.getMethodInput());
+        assertThrows(IllegalArgumentException.class, Menu::getMethodInput);
 
     }
 
@@ -60,7 +52,7 @@ public class MenuTests {
         String userInput = " ";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> menu.getAnswer(" "));
+        assertThrows(IllegalArgumentException.class, () -> Menu.getAnswer(" "));
 
     }
 
@@ -72,7 +64,7 @@ public class MenuTests {
         String userInput = " ";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> menu.getNumber(" "));
+        assertThrows(IllegalArgumentException.class, () -> Menu.getNumber(" "));
 
     }
 
@@ -85,7 +77,7 @@ public class MenuTests {
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
         String expected = "answer";
-        String actual = menu.getAnswer(" ");
+        String actual = Menu.getAnswer(" ");
         assertEquals(expected, actual);
 
     }
@@ -98,8 +90,8 @@ public class MenuTests {
         String userInput = "666888999";
         ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(bais);
-        Long expected = Long.valueOf(666888999);
-        Long actual = menu.getNumber(" ");
+        Long expected = 666888999L;
+        Long actual = Menu.getNumber(" ");
         assertEquals(expected, actual);
 
     }

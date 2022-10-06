@@ -170,16 +170,13 @@ Good bye!
 ~~~~
 
 ## Testing
-~~~~
 
-~~~~
 ## Credits
 
 ### Renegados Staff
 
-Aña Popova  
-Irina Tataru  
-Oscar Curto  
-Danny Mejía  
+Irina Tataru
+Aña Popova
+Danny Mejía
 Joaquim Crous  
-
+Oscar Curto

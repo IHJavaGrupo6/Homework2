@@ -61,5 +61,4 @@ public class MenuConvertLeadTests {
         assertEquals(1, account.getContactList().size());
         assertEquals(1, account.getOpportunityList().size());
     }
-
 }

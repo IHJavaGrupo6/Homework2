@@ -26,7 +26,7 @@ public class Menu {
         System.out.println("\033[0;1m• \u001B[34mShow leads \u001B[0m\033[0;0m to show the list of existing leads");
         System.out.println("\u001B[36m    Existing leads: " + leadMap.keySet().size() + "\u001B[0m");
         System.out.println("\033[0;1m• \u001B[34mLook up lead + id \u001B[0m\033[0;0m to find a lead by its id number and display its info");
-        System.out.println("\033[0;1m• \u001B[34mConvert lead + id \u001B[0m\033[0;0m to find a lead by its id number and convert it into a new opportunity");
+        System.out.println("\033[0;1m• \u001B[34mConvert + id \u001B[0m\033[0;0m to find a lead by its id number and convert it into a new opportunity");
         System.out.println("\033[0;1m• \u001B[34mShow opportunities \u001B[0m\033[0;0m to show the list of existing opportunities (both open and closed)");
         System.out.println("\u001B[36m    Existing opportunities: " + totalOpportunities.size() + "\u001B[0m");
         System.out.println("\033[0;1m• \u001B[34mLook up opportunity + id \u001B[0m\033[0;0m to find a lead by its id number and display its info");
@@ -56,17 +56,17 @@ public class Menu {
         switch (method) {
             case "newlead":
                 Lead lead = null;
-                boolean repeat = true;
-                while (repeat) {
+                boolean repeatLead = true;
+                while (repeatLead) {
                     try {
                         lead = newLead(getAnswer("Please enter the name of the new lead: "),
                                 getNumber("Please enter a phone number for the new lead: "),
                                 getAnswer("Please enter an email for the new lead: "),
                                 getAnswer("Please enter the name of the company for the new lead: "));
-                        repeat = false;
+                        repeatLead = false;
                     } catch (IllegalArgumentException e) {
                         System.err.println(e.getMessage());
-                        System.err.println("Going back to new Lead creation.");
+                        System.err.println("Going back to new lead creation");
                     }
                 }
                 leadMap.put(lead.getId(), lead);
@@ -74,7 +74,7 @@ public class Menu {
             case "showleads":
                 try {
                     showLeads(getLeadMap());
-                } catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
                 mainMenu();
@@ -87,10 +87,14 @@ public class Menu {
 
                 mainMenu();
             case "convert":
-                try {
-                    convertLead(id);
-                } catch (IllegalArgumentException e) {
-                    backToMainMenu(e);
+                boolean repeatConvertLead = true;
+                while (repeatConvertLead) {
+                    try {
+                        convertLead(id);
+                        repeatConvertLead = false;
+                    } catch (IllegalArgumentException e) {
+                        backToMainMenu(e);
+                    }
                 }
                 mainMenu();
             case "showopportunities":
@@ -149,138 +153,87 @@ public class Menu {
 
     public static Lead newLead(String name, long phoneNumber, String email, String company) {
         System.out.println("Creating a new lead: ");
-        /*try {*/
-            /*String name = getAnswer("Please enter the name of the new lead: ");
-            long phoneNumber = getNumber("Please enter a phone number for the new lead: ");*/
         if (!Account.validatePhone(String.valueOf(phoneNumber)))
             throw new IllegalArgumentException("Invalid phone format");
-        /*String email = getAnswer("Please enter an email for the new lead: ");*/
         if (!Account.validate(email)) throw new IllegalArgumentException("Invalid email format");
-        /*String companyName = getAnswer("Please enter the name of the company for the new lead: ");*/
         Lead lead = new Lead(name, phoneNumber, email, company);
-
         System.out.println("New lead created: ");
         System.out.println(lead);
-        /*} catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-            System.err.println("Going back to new Lead creation.");
-            newLead();
-        }*/
         return lead;
     }
 
     public static void convertLead(int id) {
         // step 1: fetching the lead
-        Lead lead;
+        if (id < 0 || id >= leadMap.size()) throw new IllegalArgumentException("No lead found with this id!");
+        // step 2: creating a contact
         Contact contact = null;
-        try {
-            lead = leadMap.get(id);
-            // step 2: creating a contact
-            contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
-            totalContacts.add(contact);
-            System.out.println("Lead converted into a new contact: ");
-            System.out.println(contact);
-        } catch (IllegalArgumentException | NullPointerException e) {
-            backToMainMenu(e);
-        }
+        contact = newContact(leadMap.get(id));
         // step 3: creating an opportunity
-        try {
-            newOpportunity();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        Opportunity opportunity = null;
+        boolean repeatOpportunity = true;
+        while (repeatOpportunity) {
+            try {
+                String product = getAnswer("Please enter product type: HYBRID, FLATBED or BOX");
+                long quantity = getNumber("Please enter the number of trucks being considered for purchase: ");
+                opportunity = newOpportunity(product, quantity, contact);
+                repeatOpportunity = false;
+            } catch (IllegalArgumentException | NullPointerException e) {
+                System.err.println(e.getMessage());
+            }
         }
         // step 4: creating an account
-        try {
-            newAccount();
-        } catch (IllegalArgumentException | NullPointerException e) {
-            backToMainMenu(e);
+        Account account = null;
+        boolean repeatAccount = true;
+        while (repeatAccount) {
+            try {
+                String industry = getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER");
+                long employeeCount = getNumber("Please enter the number of employees in the company: ");
+                String city = getAnswer("PLease enter the city in which the company is based: ");
+                String country = getAnswer("PLease enter the country in which the company is based: ");
+                account = newAccount(industry, employeeCount, city, country, contact, opportunity);
+            } catch (IllegalArgumentException | NullPointerException e) {
+                System.err.println(e.getMessage());
+            }
         }
         // step 5: adding the newly created objects to the lists and removing the lead
-        //totalContacts.add(contact);
-        //totalOpportunities.add(opportunity);
-        //accountList.add(account);
+        totalContacts.add(contact);
+        totalOpportunities.add(opportunity);
+        totalAccounts.add(account);
         leadMap.remove(id);
     }
 
-    public static Opportunity newOpportunity() {
+    public static Contact newContact(Lead lead) {
+        Contact contact = new Contact(lead.getName(), lead.getPhoneNumber(), lead.getEmail(), lead.getCompanyName());
+        System.out.println("Lead converted into a new contact: ");
+        System.out.println(contact);
+        return contact;
+    }
+
+    public static Opportunity newOpportunity(String product, long quantity, Contact contact) {
         System.out.println("Creating a new opportunity: ");
-        Product product;
-        long quantity;
-        Opportunity opportunity = null;
-        try {
-            product = getInputProductDelegate();
-            quantity = getNumber("Please enter the number of trucks being considered for purchase: ");
-            opportunity = new Opportunity(product, quantity, totalContacts.get(totalContacts.size() - 1));
-            totalOpportunities.add(opportunity);
-            System.out.println("Created a new opportunity: ");
-            System.out.println(opportunity);
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-            newOpportunity();
-        }
+        Opportunity opportunity = new Opportunity(product, quantity, contact);
+        System.out.println("Created a new opportunity: ");
+        System.out.println(opportunity);
         return opportunity;
     }
 
-    public static Product getInputProductDelegate() {
-        String productString = getAnswer("Please enter product type: HYBRID, FLATBED or BOX").toUpperCase();
-        Product product;
-        if (productString.equals("HYBRID") || productString.equals("FLATBED") || productString.equals("BOX")) {
-            product = Product.valueOf(productString);
-        } else {
-            throw new IllegalArgumentException("No such product type found. Please enter HYBRID, FLATBED or BOX");
-        }
-        return product;
-    }
-
-    public static Account newAccount() {
+    public static Account newAccount(String industry, long employeeCount, String city, String country, Contact contact, Opportunity opportunity) {
         System.out.println("Creating a new account: ");
-        Industry industry;
-        long employeeCount;
-        String city;
-        String country;
-        Account account = null;
-        try {
-            industry = getInputIndustryDelegate();
-            employeeCount = getNumber("Please enter the number of employees in the company: ");
-            city = getAnswer("PLease enter the city in which the company is based: ");
-            country = getAnswer("PLease enter the country in which the company is based: ");
-            account = new Account(industry, employeeCount, city, country);
-            account.addOpportunityToList(totalOpportunities.get(totalOpportunities.size() - 1));
-            account.addContactToList(totalContacts.get(totalContacts.size() - 1));
-            totalAccounts.add(account);
-            System.out.println("Created a new account: ");
-            System.out.println(account);
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-            newAccount();
-        }
+        Account account = new Account(industry, employeeCount, city, country, contact, opportunity);
+        System.out.println("Created a new account: ");
+        System.out.println(account);
         return account;
     }
 
-    public static Industry getInputIndustryDelegate() {
-        String industryString = getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER").toUpperCase();
-        Industry industry;
-        if (industryString.equals("PRODUCE")
-                || industryString.equals("ECOMMERCE")
-                || industryString.equals("MANUFACTURING")
-                || industryString.equals("MEDICAL")
-                || industryString.equals("OTHER")) {
-            industry = Industry.valueOf(industryString);
-        } else {
-            throw new IllegalArgumentException("No such industry type found. Please enter PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER");
-        }
-        return industry;
-    }
-
-    public static void showLeads(Map<Integer,Lead> leadMap) {
+    public static void showLeads(Map<Integer, Lead> leadMap) {
         if (leadMap.isEmpty()) {
-            //System.err.println("There are no leads to show.");
             throw new IllegalArgumentException("There are no leads to show.");
-        }else {
-        System.out.println("\033[0;1m Existing leads: \033[0;0m\n");
-        for (Lead lead : leadMap.values()) {
-            System.out.println("•" + lead.toString());
-        }}
+        } else {
+            System.out.println("\033[0;1m Existing leads: \033[0;0m\n");
+            for (Lead lead : leadMap.values()) {
+                System.out.println("•" + lead.toString());
+            }
+        }
     }
 
     public static void showOpportunities() {

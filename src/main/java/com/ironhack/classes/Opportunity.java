@@ -5,15 +5,15 @@ import com.ironhack.enums.Status;
 
 public class Opportunity {
     private final int id;
-    private static int contador = 0;
+    private static int counter3 = 0;
     private long quantity;
     private Product product;
     private Status status;
 
     private Contact decisionMaker;
 
-    public Opportunity(Product product, long quantity, Contact decisionMaker) {
-        this.id = contador++;
+    public Opportunity(String product, long quantity, Contact decisionMaker) {
+        this.id = counter3++;
         setProduct(product);
         setQuantity(quantity);
         setStatus(Status.OPEN);
@@ -23,7 +23,6 @@ public class Opportunity {
     public int getId() {
         return id;
     }
-
 
 
     public long getQuantity() {
@@ -39,8 +38,13 @@ public class Opportunity {
         return product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct(String product) {
+        product = product.toUpperCase();
+        if (product.equals("HYBRID") || product.equals("FLATBED") || product.equals("BOX")) {
+            this.product = Product.valueOf(product);
+        } else {
+            throw new IllegalArgumentException("No such product type found. Please enter HYBRID, FLATBED or BOX");
+        }
     }
 
     public Status getStatus() {

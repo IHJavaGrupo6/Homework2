@@ -11,9 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MenuNewLeadTests {
     @Test
-    @DisplayName("lalla")
-    void newlead_worksOK(){
-
+    @DisplayName("Created a new Lead correctly")
+    void newLead_worksOK(){
         Assertions.assertEquals("quim",Menu.newLead("quim",999888777,"mail@mail.com","company").getName());
         Assertions.assertThrows(IllegalArgumentException.class,()->Menu.newLead("",999888777,"fsdgds","company"));
         Assertions.assertThrows(IllegalArgumentException.class,()->Menu.newLead("",0,"fsdgds@mail.com","company"));
@@ -21,7 +20,7 @@ public class MenuNewLeadTests {
     }
 
     @Test
-    @DisplayName("fdsfs ")
+    @DisplayName("Showing Leads correctly ")
     void showLeads_worksOK(){
         Lead lead1 = new Lead("quim",999888777,"mail@mail.com","company");
         Lead lead2 = new Lead("quim",999888777,"mail@mail.com","company");

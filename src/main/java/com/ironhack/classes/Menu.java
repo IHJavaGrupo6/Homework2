@@ -52,6 +52,7 @@ public class Menu {
         try {
             id = parseInt(methodAndId.replaceAll("\\D+", ""));
         } catch (NumberFormatException ignored) {
+
         }
         switch (method) {
             case "newlead":
@@ -59,10 +60,14 @@ public class Menu {
                 boolean repeatLead = true;
                 while (repeatLead) {
                     try {
-                        lead = newLead(getAnswer("Please enter the name of the new lead: "),
-                                getNumber("Please enter a phone number for the new lead: "),
-                                getAnswer("Please enter an email for the new lead: "),
-                                getAnswer("Please enter the name of the company for the new lead: "));
+                        String name = getAnswer("Please enter the name of the new lead: ");
+                        Long number = getNumber("Please enter a phone number for the new lead: ");
+                        if (!Account.validatePhone(String.valueOf(number)))
+                            throw new IllegalArgumentException("Invalid phone format");
+                        String mail = getAnswer("Please enter an email for the new lead: ");
+                        if (!Account.validate(mail)) throw new IllegalArgumentException("Invalid email format");
+                        String company = getAnswer("Please enter the name of the company for the new lead: ");
+                        lead = newLead(name, number, mail, company);
                         repeatLead = false;
                     } catch (IllegalArgumentException e) {
                         System.err.println(e.getMessage());
@@ -135,8 +140,8 @@ public class Menu {
         input = new Scanner(System.in);
         System.out.println(question);
         String answer = input.nextLine();
-        if (answer.isBlank()) {
-            throw new IllegalArgumentException("Nothing received. Please enter at least one letter or number!");
+        if (answer.isBlank() || answer.replaceAll("\\d+", "").isBlank()) {
+            throw new IllegalArgumentException("No text received. Please enter at least one letter!");
         }
         return answer;
     }
@@ -173,9 +178,9 @@ public class Menu {
         boolean repeatOpportunity = true;
         while (repeatOpportunity) {
             try {
-                String product = getAnswer("Please enter product type: HYBRID, FLATBED or BOX");
-                long quantity = getNumber("Please enter the number of trucks being considered for purchase: ");
-                opportunity = newOpportunity(product, quantity, contact);
+                System.out.println("Creating a new opportunity: ");
+                opportunity = newOpportunity(getAnswer("Please enter product type: HYBRID, FLATBED or BOX"),
+                        getNumber("Please enter the number of trucks considered for purchase: "), contact);
                 repeatOpportunity = false;
             } catch (IllegalArgumentException | NullPointerException e) {
                 System.err.println(e.getMessage());
@@ -186,11 +191,12 @@ public class Menu {
         boolean repeatAccount = true;
         while (repeatAccount) {
             try {
-                String industry = getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER");
-                long employeeCount = getNumber("Please enter the number of employees in the company: ");
-                String city = getAnswer("PLease enter the city in which the company is based: ");
-                String country = getAnswer("PLease enter the country in which the company is based: ");
-                account = newAccount(industry, employeeCount, city, country, contact, opportunity);
+                System.out.println("Creating a new account: ");
+                account = newAccount(getAnswer("Please enter industry type: PRODUCE, ECOMMERCE, MANUFACTURING, MEDICAL or OTHER"),
+                        getNumber("Please enter the number of employees in the company: "),
+                        getAnswer("PLease enter the city in which the company is based: "),
+                        getAnswer("PLease enter the country in which the company is based: "), contact, opportunity);
+                repeatAccount = false;
             } catch (IllegalArgumentException | NullPointerException e) {
                 System.err.println(e.getMessage());
             }
@@ -210,7 +216,6 @@ public class Menu {
     }
 
     public static Opportunity newOpportunity(String product, long quantity, Contact contact) {
-        System.out.println("Creating a new opportunity: ");
         Opportunity opportunity = new Opportunity(product, quantity, contact);
         System.out.println("Created a new opportunity: ");
         System.out.println(opportunity);
@@ -218,7 +223,6 @@ public class Menu {
     }
 
     public static Account newAccount(String industry, long employeeCount, String city, String country, Contact contact, Opportunity opportunity) {
-        System.out.println("Creating a new account: ");
         Account account = new Account(industry, employeeCount, city, country, contact, opportunity);
         System.out.println("Created a new account: ");
         System.out.println(account);

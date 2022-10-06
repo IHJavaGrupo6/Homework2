@@ -19,7 +19,6 @@ public class MenuNewLeadTest {
     @DisplayName("lalla")
     void newlead_worksOK(){
 
-
         Assertions.assertEquals("quim",Menu.newLead("quim",999888777,"mail@mail.com","company").getName());
         Assertions.assertThrows(IllegalArgumentException.class,()->Menu.newLead("",999888777,"fsdgds","company"));
         Assertions.assertThrows(IllegalArgumentException.class,()->Menu.newLead("",0,"fsdgds@mail.com","company"));
@@ -46,4 +45,8 @@ public class MenuNewLeadTest {
         Map<Integer, Lead> leadMap1 = new HashMap<>();
         assertThrows(IllegalArgumentException.class,()->Menu.showLeads(leadMap1));
     }
+
+
+
+
 }

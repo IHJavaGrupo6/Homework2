@@ -12,6 +12,11 @@ public class Opportunity {
 
     private Contact decisionMaker;
 
+    public Opportunity() {
+        this.id = counter3++;
+        setStatus(Status.OPEN);
+    }
+
     public Opportunity(String product, long quantity, Contact decisionMaker) {
         this.id = counter3++;
         setProduct(product);

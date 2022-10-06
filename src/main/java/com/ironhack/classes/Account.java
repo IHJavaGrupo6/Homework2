@@ -17,6 +17,10 @@ public class Account {
     private List<Contact> contactList = new ArrayList<>();
     private List<Opportunity> opportunityList = new ArrayList<>();
 
+    public Account() {
+        this.id = counter++;
+    }
+
     //  Constructor with empty contact list and opportunity list
     public Account(String industry, long employeeCount, String city, String country) {
         this.id = counter++;
@@ -95,14 +99,6 @@ public class Account {
         this.country = country;
     }
 
-    public void addContactToList(Contact contact) {
-        contactList.add(contact);
-    }
-
-    public void addOpportunityToList(Opportunity opportunity) {
-        opportunityList.add(opportunity);
-    }
-
     public static final Pattern VALID_PHONENUMBER_REGEX =
             Pattern.compile("\\A[0-9]{3}[0-9]{3}[0-9]{3}\\z", Pattern.CASE_INSENSITIVE);
 
@@ -122,7 +118,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account: id = " + id + ", industry=" + industry + ", employeeCount=" + employeeCount + ", city='" + city + ", country='" + country +
+        return "Account: id = " + id + ", industry= " + industry + ", employeeCount= " + employeeCount + ", city= " + city + ", country= " + country +
                 "\n Contact List \n" + contactList + "\n Opportunity List \n" + opportunityList;
     }
 }

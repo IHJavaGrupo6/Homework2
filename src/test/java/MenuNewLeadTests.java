@@ -4,17 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.awt.SystemColor.menu;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MenuNewLeadTest {
+public class MenuNewLeadTests {
     @Test
     @DisplayName("lalla")
     void newlead_worksOK(){
@@ -28,15 +23,12 @@ public class MenuNewLeadTest {
     @Test
     @DisplayName("fdsfs ")
     void showLeads_worksOK(){
-        //Menu menu1 = new Menu();
         Lead lead1 = new Lead("quim",999888777,"mail@mail.com","company");
         Lead lead2 = new Lead("quim",999888777,"mail@mail.com","company");
         Lead lead3 = new Lead("quim",999888777,"mail@mail.com","company");
         Lead lead4 = new Lead("quim",999888777,"mail@mail.com","company");
         Map<Integer, Lead> leadMap = new HashMap<>();
         leadMap.put(lead1.getId(),lead1);
-
-
         leadMap.put(lead2.getId(),lead2);
         leadMap.put(lead3.getId(),lead3);
         leadMap.put(lead4.getId(),lead4);

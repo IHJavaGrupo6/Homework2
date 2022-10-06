@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -21,12 +20,14 @@ public class MenuTests {
 
     Menu menu;
     Scanner input;
+
     @BeforeEach
-    void setUp(){
+    void setUp() {
 
         menu = new Menu();
         input = new Scanner(System.in);
     }
+
     @Test
     @DisplayName("getMethodInput() throws exception with empty input")
     void getMethodInput_throwsIllegalArgumentException() {
@@ -102,21 +103,4 @@ public class MenuTests {
         assertEquals(expected, actual);
 
     }
-
-    @Test
-    @DisplayName("getInputProductDelegate() throws exception wrong input")
-    void getInputProductDelegate_throwsIllegalArgumentException() {
-
-
-        String userInput = "blabla";
-        ByteArrayInputStream bais = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(bais);
-        assertThrows(IllegalArgumentException.class, () -> menu.getInputProductDelegate());
-
-    }
-
-
-
-
-
 }

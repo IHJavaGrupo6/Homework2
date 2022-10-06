@@ -13,8 +13,9 @@ public class OpportunityTests {
     void setProduct_works(){
         Lead lead = new Lead("quim1",999888777,"mail@mail.com","company");
         Opportunity opportunity = new Opportunity("Hybrid", 20, Menu.newContact(lead));
-        Assertions.assertDoesNotThrow(()->opportunity.setProduct("Hybrid"));
 
+        Assertions.assertDoesNotThrow(()->opportunity.setProduct("Hybrid"));
+        Assertions.assertEquals("HYBRID", opportunity.getProduct().toString());
         Assertions.assertThrows(IllegalArgumentException.class, ()-> opportunity.setProduct("PacoPorras"));
     }
 }

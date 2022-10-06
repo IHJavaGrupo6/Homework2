@@ -55,7 +55,21 @@ public class Menu {
         }
         switch (method) {
             case "newlead":
-                newLead();
+                Lead lead = null;
+                boolean repeat = true;
+                while (repeat) {
+                    try {
+                        lead = newLead(getAnswer("Please enter the name of the new lead: "),
+                                getNumber("Please enter a phone number for the new lead: "),
+                                getAnswer("Please enter an email for the new lead: "),
+                                getAnswer("Please enter the name of the company for the new lead: "));
+                        repeat = false;
+                    } catch (IllegalArgumentException e) {
+                        System.err.println(e.getMessage());
+                        System.err.println("Going back to new Lead creation.");
+                    }
+                }
+                leadMap.put(lead.getId(), lead);
                 mainMenu();
             case "showleads":
                 showLeads();
@@ -66,6 +80,7 @@ public class Menu {
                 } catch (IllegalArgumentException e) {
                     backToMainMenu(e);
                 }
+
                 mainMenu();
             case "convert":
                 try {
@@ -128,24 +143,26 @@ public class Menu {
         return parseLong(numberString);
     }
 
-    public static void newLead() {
+    public static Lead newLead(String name, long phoneNumber, String email, String company) {
         System.out.println("Creating a new lead: ");
-        try {
-            String name = getAnswer("Please enter the name of the new lead: ");
-            long phoneNumber = getNumber("Please enter a phone number for the new lead: ");
-            if(!Account.validatePhone(String.valueOf(phoneNumber))) throw new IllegalArgumentException("Invalid phone format");
-            String email = getAnswer("Please enter an email for the new lead: ");
-            if(!Account.validate(email)) throw new IllegalArgumentException("Invalid email format");
-            String companyName = getAnswer("Please enter the name of the company for the new lead: ");
-            Lead lead = new Lead(name, phoneNumber, email, companyName);
-            leadMap.put(lead.getId(), lead);
-            System.out.println("New lead created: ");
-            System.out.println(lead);
-        } catch (IllegalArgumentException e) {
+        /*try {*/
+            /*String name = getAnswer("Please enter the name of the new lead: ");
+            long phoneNumber = getNumber("Please enter a phone number for the new lead: ");*/
+        if (!Account.validatePhone(String.valueOf(phoneNumber)))
+            throw new IllegalArgumentException("Invalid phone format");
+        /*String email = getAnswer("Please enter an email for the new lead: ");*/
+        if (!Account.validate(email)) throw new IllegalArgumentException("Invalid email format");
+        /*String companyName = getAnswer("Please enter the name of the company for the new lead: ");*/
+        Lead lead = new Lead(name, phoneNumber, email, company);
+
+        System.out.println("New lead created: ");
+        System.out.println(lead);
+        /*} catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             System.err.println("Going back to new Lead creation.");
             newLead();
-        }
+        }*/
+        return lead;
     }
 
     public static void convertLead(int id) {
@@ -189,7 +206,7 @@ public class Menu {
         try {
             product = getInputProductDelegate();
             quantity = getNumber("Please enter the number of trucks being considered for purchase: ");
-            opportunity = new Opportunity(product, quantity, totalContacts.get(totalContacts.size()-1));
+            opportunity = new Opportunity(product, quantity, totalContacts.get(totalContacts.size() - 1));
             totalOpportunities.add(opportunity);
             System.out.println("Created a new opportunity: ");
             System.out.println(opportunity);
@@ -224,8 +241,8 @@ public class Menu {
             city = getAnswer("PLease enter the city in which the company is based: ");
             country = getAnswer("PLease enter the country in which the company is based: ");
             account = new Account(industry, employeeCount, city, country);
-            account.addOpportunityToList(totalOpportunities.get(totalOpportunities.size()-1));
-            account.addContactToList(totalContacts.get(totalContacts.size()-1));
+            account.addOpportunityToList(totalOpportunities.get(totalOpportunities.size() - 1));
+            account.addContactToList(totalContacts.get(totalContacts.size() - 1));
             totalAccounts.add(account);
             System.out.println("Created a new account: ");
             System.out.println(account);

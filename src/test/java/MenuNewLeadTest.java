@@ -1,4 +1,5 @@
 import com.ironhack.classes.Menu;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +12,27 @@ import static java.awt.SystemColor.menu;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MenuNewLeadTest {
-    /*@Test
+    @Test
     @DisplayName("lalla")
     void newlead_worksOK(){
 
+
+        Assertions.assertEquals("quim",Menu.newLead("quim",999888777,"mail@mail.com","company").getName());
+
+        //Assertions.assertEquals(1,Menu.getLeadMap().size());
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
         String simulatedUserInput = "name" + System.getProperty("line.separator")
                 + "832999777" + System.getProperty("line.separator")
                 + "mail@mail.com" + System.getProperty("line.separator")
@@ -30,6 +48,6 @@ public class MenuNewLeadTest {
         String actual = lines[lines.length-1];
         assertEquals("Lead: id = 0, name = name, phoneNumber = 832999777, email = mail@mail.com, companyName = company name\n", actual);
         System.exit(0);
-        System.setIn(savedStandardInputStream);
-    }*/
+        System.setIn(savedStandardInputStream);*/
+    }
 }

@@ -1,3 +1,4 @@
+import com.ironhack.classes.Lead;
 import com.ironhack.classes.Menu;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -7,9 +8,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.awt.SystemColor.menu;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MenuNewLeadTest {
     @Test
@@ -18,36 +21,29 @@ public class MenuNewLeadTest {
 
 
         Assertions.assertEquals("quim",Menu.newLead("quim",999888777,"mail@mail.com","company").getName());
+        Assertions.assertThrows(IllegalArgumentException.class,()->Menu.newLead("",999888777,"fsdgds","company"));
+        Assertions.assertThrows(IllegalArgumentException.class,()->Menu.newLead("",0,"fsdgds@mail.com","company"));
 
-        //Assertions.assertEquals(1,Menu.getLeadMap().size());
+    }
+
+    @Test
+    @DisplayName("fdsfs ")
+    void showLeads_worksOK(){
+        //Menu menu1 = new Menu();
+        Lead lead1 = new Lead("quim",999888777,"mail@mail.com","company");
+        Lead lead2 = new Lead("quim",999888777,"mail@mail.com","company");
+        Lead lead3 = new Lead("quim",999888777,"mail@mail.com","company");
+        Lead lead4 = new Lead("quim",999888777,"mail@mail.com","company");
+        Map<Integer, Lead> leadMap = new HashMap<>();
+        leadMap.put(lead1.getId(),lead1);
 
 
+        leadMap.put(lead2.getId(),lead2);
+        leadMap.put(lead3.getId(),lead3);
+        leadMap.put(lead4.getId(),lead4);
+        assertDoesNotThrow(()->Menu.showLeads(leadMap));
 
-
-
-
-
-
-
-
-
-
-        /*
-        String simulatedUserInput = "name" + System.getProperty("line.separator")
-                + "832999777" + System.getProperty("line.separator")
-                + "mail@mail.com" + System.getProperty("line.separator")
-                + "company name" + System.getProperty("line.separator");
-
-        InputStream savedStandardInputStream = System.in;
-        System.setIn(new ByteArrayInputStream(simulatedUserInput.getBytes()));
-        ByteArrayOutputStream outPut = new ByteArrayOutputStream();
-        PrintStream print = new PrintStream(outPut);
-        System.setOut(print);
-        Menu.newLead();
-        String[] lines = outPut.toString().split(System.lineSeparator());
-        String actual = lines[lines.length-1];
-        assertEquals("Lead: id = 0, name = name, phoneNumber = 832999777, email = mail@mail.com, companyName = company name\n", actual);
-        System.exit(0);
-        System.setIn(savedStandardInputStream);*/
+        Map<Integer, Lead> leadMap1 = new HashMap<>();
+        assertThrows(IllegalArgumentException.class,()->Menu.showLeads(leadMap1));
     }
 }

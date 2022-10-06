@@ -72,7 +72,11 @@ public class Menu {
                 leadMap.put(lead.getId(), lead);
                 mainMenu();
             case "showleads":
-                showLeads();
+                try {
+                    showLeads(getLeadMap());
+                } catch (IllegalArgumentException e){
+                    System.out.println(e.getMessage());
+                }
                 mainMenu();
             case "lookuplead":
                 try {
@@ -268,11 +272,15 @@ public class Menu {
         return industry;
     }
 
-    public static void showLeads() {
+    public static void showLeads(Map<Integer,Lead> leadMap) {
+        if (leadMap.isEmpty()) {
+            //System.err.println("There are no leads to show.");
+            throw new IllegalArgumentException("There are no leads to show.");
+        }else {
         System.out.println("\033[0;1m Existing leads: \033[0;0m\n");
         for (Lead lead : leadMap.values()) {
             System.out.println("•" + lead.toString());
-        }
+        }}
     }
 
     public static void showOpportunities() {

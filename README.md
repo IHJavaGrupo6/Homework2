@@ -171,12 +171,39 @@ Good bye!
 
 ## Testing
 
+### AccountTest
+
+In this test we tested the setIndustry method to works OK and if it throws the
+IllegalArgumentException if had wrong inputs.
+
+### MenuConvertLeadTest
+
+In this test we checked if newContact method works correctly creating it from a 
+Lead. Then we verify the newAccount and newOpportunity methods works Ok.
+We also tried if the convertLead throws the exception.
+
+### MenuNewLeadTest
+
+In this one we tested if newLead and showLead functions correctly and doesn't 
+give any problem.
+
+### OportunityTest
+
+We tested here if the setProduct runs properly.
+
+### MenuTest
+
+Here we tested some methods (getMethodInput, getAnswer, getNumber) simulating
+the inputs that user has to insert using ByteArrayInputStream class which
+allows to fake them. We checked if they work correctly and don't throw exception.
+
+
 ## Credits
 
 ### Renegados Staff
 
-Irina Tataru
-Aña Popova
-Danny Mejía
-Joaquim Crous  
-Oscar Curto
+Irina Tataru - https://github.com/mirnaia83  
+Aña Popova  - https://github.com/anya-chocolat  
+Danny Mejía  - https://github.com/xpan1c  
+Joaquim Crous  -  https://github.com/QuimCrous  
+Oscar Curto  - https://github.com/OscarCurto
